@@ -4,25 +4,20 @@ import { v4 as uuidv4 } from 'uuid'
 
 const CardBoard = ({ shuffledImages }) => {
   const [flippedIndex, setFlippedIndex] = useState([])
-  const [foundPhoto, setFoundPhoto] = useState({})
+  const [foundPhoto, setFoundPhoto] = useState([])
 
   const handleClick = (index) => {
-    if (foundPhoto[index] || flippedIndex.includes(index)) {
-      return
-    }
-
+    // Ajoute la carte cliquée à flippedIndex
     const newFlippedIndex = [...flippedIndex, index]
     setFlippedIndex(newFlippedIndex)
 
+    // Si deux cartes sont retournées, compare-les
     if (newFlippedIndex.length === 2) {
       const [firstIndex, secondIndex] = newFlippedIndex
 
       if (shuffledImages[firstIndex] === shuffledImages[secondIndex]) {
-        setFoundPhoto({
-          ...foundPhoto,
-          [firstIndex]: true,
-          [secondIndex]: true,
-        })
+        // Si les cartes correspondent, ajoute-les à foundPhoto
+        setFoundPhoto([...foundPhoto, firstIndex, secondIndex])
         setFlippedIndex([])
       } else {
         setTimeout(() => {
@@ -32,8 +27,9 @@ const CardBoard = ({ shuffledImages }) => {
     }
   }
 
+  // Vérifie si une carte est visible (trouvée ou retournée)
   const isPhotoVisible = (index) => {
-    return foundPhoto[index] || flippedIndex.includes(index)
+    return foundPhoto.includes(index) || flippedIndex.includes(index)
   }
 
   return (
