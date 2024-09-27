@@ -35,6 +35,7 @@ const CardBoard = ({ shuffledImages }) => {
   return (
     <div className='game-board'>
       {shuffledImages.map((image, index) =>
+        // Condition quand la photo est visble, la photo affiche grace à l'url, si non on déclenche l'événement handleClick
         isPhotoVisible(index) ? (
           <img src={image} key={uuidv4()} className='game-photo' alt='card' />
         ) : (
