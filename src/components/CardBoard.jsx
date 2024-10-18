@@ -25,7 +25,7 @@ const CardBoard = () => {
       } else {
         setTimeout(() => {
           setFlippedIndex([])
-        }, 500)
+        }, 750)
       }
     }
   }
