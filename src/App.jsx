@@ -1,14 +1,11 @@
 import './App.css'
-import MemoryGame from './components/MemoryGame'
-import { images } from './data/imagesData'
+import CardBoard from './components/CardBoard'
 
 function App() {
-  const gameImages = [...images, ...images]
-
   return (
     <div className='App'>
       <h1>Memory Game</h1>
-      <MemoryGame images={gameImages} />
+      <CardBoard />
     </div>
   )
 }

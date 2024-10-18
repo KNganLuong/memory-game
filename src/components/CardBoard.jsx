@@ -1,8 +1,11 @@
-/* eslint-disable react/prop-types */
-import { useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
+/* eslint-disable no-unused-vars */
 
-const CardBoard = ({ shuffledImages }) => {
+import React, { useReducer, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
+import { initialState, gameReducer } from './usersReducer'
+import './CardBoard.css'
+
+const CardBoard = () => {
   const [flippedIndex, setFlippedIndex] = useState([])
   const [foundPhoto, setFoundPhoto] = useState([])
 
@@ -15,14 +18,14 @@ const CardBoard = ({ shuffledImages }) => {
     if (newFlippedIndex.length === 2) {
       const [firstIndex, secondIndex] = newFlippedIndex
 
-      if (shuffledImages[firstIndex] === shuffledImages[secondIndex]) {
+      if (state.board[firstIndex] === state.board[secondIndex]) {
         // Si les cartes correspondent, ajoute-les à foundPhoto
         setFoundPhoto([...foundPhoto, firstIndex, secondIndex])
         setFlippedIndex([])
       } else {
         setTimeout(() => {
           setFlippedIndex([])
-        }, 1000)
+        }, 500)
       }
     }
   }
@@ -32,21 +35,34 @@ const CardBoard = ({ shuffledImages }) => {
     return foundPhoto.includes(index) || flippedIndex.includes(index)
   }
 
+  const [state, dispatch] = useReducer(gameReducer, initialState)
+
+  const handleResetGame = () => {
+    dispatch({ type: 'RESET' })
+    setFlippedIndex([])
+    setFoundPhoto([])
+  }
+
   return (
-    <div className='game-board'>
-      {shuffledImages.map((image, index) =>
-        // Condition quand la photo est visble, la photo affiche grace à l'url, si non on déclenche l'événement handleClick
-        isPhotoVisible(index) ? (
-          <img src={image} key={uuidv4()} className='game-photo' alt='card' />
-        ) : (
-          <div
-            onClick={() => handleClick(index)}
-            key={uuidv4()}
-            className='game-photo'
-          ></div>
-        )
-      )}
-    </div>
+    <>
+      <div className='game-board'>
+        {state.board.map((image, index) =>
+          // Condition quand la photo est visble, la photo affiche grace à l'url, si non on déclenche l'événement handleClick
+          isPhotoVisible(index) ? (
+            <img src={image} key={uuidv4()} className='game-photo' alt='card' />
+          ) : (
+            <div
+              onClick={() => handleClick(index)}
+              key={uuidv4()}
+              className='game-photo'
+            ></div>
+          )
+        )}
+      </div>
+      <button className='game-reset' onClick={handleResetGame}>
+        Reset Game
+      </button>
+    </>
   )
 }
 
